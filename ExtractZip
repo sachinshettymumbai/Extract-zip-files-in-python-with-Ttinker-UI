@@ -1,0 +1,47 @@
+import os,csv,sys,time
+from tkinter.filedialog import askopenfilename
+from tkinter  import filedialog
+from zipfile import ZipFile
+import pyttsx3
+
+
+engine = pyttsx3.init()
+
+
+#Setting the voice to female
+
+en_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
+engine.setProperty('voice', en_voice_id)
+
+
+engine.say("Select the zip file which you want to  extract")
+engine.runAndWait()
+
+
+
+Zipfilename= askopenfilename (initialdir="C:/",title = "Select zip file",filetypes= (("Zip files","*.zip"),("all files","*.*")))
+
+if(Zipfilename[-3:] != 'zip') :
+    engine.say("Selected file is not a zip file")
+    engine.runAndWait()
+    time.sleep(3)
+    sys.exit(0)
+else:
+     print(Zipfilename)
+
+
+engine.say("Select the folder to unzip files")
+engine.runAndWait()
+
+FoldertoExtract = filedialog.askdirectory(initialdir="C:/",title = "Select folder to extract")
+
+with ZipFile(Zipfilename, 'r') as zip:
+    print('Extracting all the files now...')
+    zip.extractall(FoldertoExtract)
+    zip.printdir()
+
+engine.say('Contents of' + Zipfilename )
+engine.say('has been extracted to')
+engine.say(FoldertoExtract + 'folder')
+engine.runAndWait()
+
